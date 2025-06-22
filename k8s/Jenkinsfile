@@ -6,12 +6,7 @@ pipeline {
     DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
   }
 
-  stages {
-    stage('Checkout') {
-      steps {
-        git 'https://github.com/AyoubGharbi27/personal_project_devops.git'
-      }
-    }
+
 
     stage('Build Backend') {
       steps {
