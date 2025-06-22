@@ -2,14 +2,14 @@ pipeline {
   agent any
 
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // Jenkins credentials ID
     DOCKERHUB_USERNAME = 'dingus27'
+    DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
   }
 
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/dingus27/flask-vue-crud.git'  // Update if needed
+        git 'https://github.com/dingus27/flask-vue-crud.git'
       }
     }
 
