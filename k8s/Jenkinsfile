@@ -6,7 +6,8 @@ pipeline {
     DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
   }
 
-
+  stages {
+   
 
     stage('Build Backend') {
       steps {
