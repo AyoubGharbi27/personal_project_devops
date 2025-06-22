@@ -30,15 +30,18 @@ pipeline {
     }
 
     stage('Push to Docker Hub') {
-      steps {
-        script {
-          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-            docker.image("${DOCKERHUB_USERNAME}/flask-backend:latest").push()
-            docker.image("${DOCKERHUB_USERNAME}/vue-frontend:latest").push()
-          }
-        }
+  steps {
+    script {
+      withEnv(["DOCKER_USER=Dingus27", "DOCKER_PASS=AGaqwzsxedc147852369"]) {
+        bat """
+          docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+          docker push dingus27/flask-backend:latest
+          docker push dingus27/vue-frontend:latest
+        """
       }
     }
+  }
+}
 
     
   }
