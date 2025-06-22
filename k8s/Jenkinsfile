@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/dingus27/flask-vue-crud.git'
+        git 'https://github.com/AyoubGharbi27/personal_project_devops.git'
       }
     }
 
