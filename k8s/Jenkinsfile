@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     DOCKERHUB_USERNAME = 'dingus27'
-    DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
+    DOCKERHUB_CREDENTIALS = 'dockerhub'
   }
 
   stages {
@@ -40,12 +40,6 @@ pipeline {
       }
     }
 
-    stage('Deploy to Kubernetes') {
-      steps {
-        sh 'kubectl apply -f k8s/postgres.yaml'
-        sh 'kubectl apply -f k8s/server.yaml'
-        sh 'kubectl apply -f k8s/client.yaml'
-      }
-    }
+    
   }
 }
