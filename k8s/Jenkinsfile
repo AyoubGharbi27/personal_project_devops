@@ -1,0 +1,55 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // Jenkins credentials ID
+    DOCKERHUB_USERNAME = 'dingus27'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/dingus27/flask-vue-crud.git'  // Update if needed
+      }
+    }
+
+    stage('Build Backend') {
+      steps {
+        dir('server') {
+          script {
+            docker.build("${DOCKERHUB_USERNAME}/flask-backend:latest")
+          }
+        }
+      }
+    }
+
+    stage('Build Frontend') {
+      steps {
+        dir('client') {
+          script {
+            docker.build("${DOCKERHUB_USERNAME}/vue-frontend:latest")
+          }
+        }
+      }
+    }
+
+    stage('Push to Docker Hub') {
+      steps {
+        script {
+          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+            docker.image("${DOCKERHUB_USERNAME}/flask-backend:latest").push()
+            docker.image("${DOCKERHUB_USERNAME}/vue-frontend:latest").push()
+          }
+        }
+      }
+    }
+
+    stage('Deploy to Kubernetes') {
+      steps {
+        sh 'kubectl apply -f k8s/postgres.yaml'
+        sh 'kubectl apply -f k8s/server.yaml'
+        sh 'kubectl apply -f k8s/client.yaml'
+      }
+    }
+  }
+}

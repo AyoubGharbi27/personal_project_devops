@@ -3,18 +3,10 @@ import Books from '../components/Books.vue'
 import Ping from '../components/Ping.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/'),  // Hardcoded for Docker compatibility
   routes: [
-    {
-      path: '/',
-      name: 'Books',
-      component: Books,
-    },
-    {
-      path: '/ping',
-      name: 'ping',
-      component: Ping
-    },
+    { path: '/', name: 'Books', component: Books },
+    { path: '/ping', name: 'ping', component: Ping }
   ]
 })
 
