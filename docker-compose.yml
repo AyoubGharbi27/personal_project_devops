@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   client:
-    build: ./client
+    image: dingus27/client:latest
     ports:
       - "8081:80"
     depends_on:
       - server
 
   server:
-    build: ./server
+    image: dingus27/server:latest
     ports:
       - "5001:5000"
     environment:
