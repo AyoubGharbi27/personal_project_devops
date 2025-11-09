@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "myapp.fullname" . }}-client
+spec:
+  selector:
+    app: client
+  ports:
+    - port: {{ .Values.client.servicePort }}
+      targetPort: {{ .Values.client.containerPort }}
+      nodePort: {{ .Values.client.nodePort }}
+  type: NodePort
