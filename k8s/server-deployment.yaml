@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  namespace: flask-vue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: dingus27/server           # your Docker Hub image
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://postgres:postgres@postgres:5432/flask_vue"
+          # For production replace with a Secret-driven URL or build the URL in your app from secrets
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      imagePullSecrets:
+      - name: regcred   # only if you created it and images are private; safe to leave if not present
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  namespace: flask-vue
+spec:
+  selector:
+    app: server
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
